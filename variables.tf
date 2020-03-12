@@ -1,11 +1,21 @@
 variable "private_subnet_ids" {
   description = "(Required) IDs of the subnets to which the services and database will be deployed"
-  default     = []
 }
 
 variable "public_subnet_ids" {
   description = "(Required) IDs of the subnets to which the load balancer will be deployed"
-  default     = []
+}
+
+variable "domain" {
+  description = "(Required) Domain where metabase will be hosted. Example: metabase.mycompany.com"
+}
+
+variable "certificate_arn" {
+  description = "(Required) https://www.terraform.io/docs/providers/aws/r/lb_listener.html#certificate_arn"
+}
+
+variable "vpc_id" {
+  description = "(Required) https://www.terraform.io/docs/providers/aws/r/security_group.html#vpc_id"
 }
 
 variable "id" {
@@ -46,16 +56,4 @@ variable "desired_count" {
 variable "alb_log_expiration_days" {
   description = "(Optional) https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#days"
   default     = "90"
-}
-
-variable "domain" {
-  description = "(Required) Domain where metabase will be hosted. Example: metabase.mycompany.com"
-}
-
-variable "certificate_arn" {
-  description = "(Required) https://www.terraform.io/docs/providers/aws/r/lb_listener.html#certificate_arn"
-}
-
-variable "vpc_id" {
-  description = "(Required) https://www.terraform.io/docs/providers/aws/r/security_group.html#vpc_id"
 }
