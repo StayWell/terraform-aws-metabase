@@ -12,6 +12,7 @@ resource "aws_rds_cluster" "this" {
   db_subnet_group_name            = aws_db_subnet_group.this.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.this.id
   deletion_protection             = var.protection
+  enable_http_endpoint            = true
   tags                            = var.tags
 
   scaling_configuration {
@@ -74,4 +75,3 @@ resource "aws_security_group_rule" "rds_ingress_ecs" {
   security_group_id        = aws_security_group.ecs.id
   source_security_group_id = aws_security_group.alb.id
 }
-
