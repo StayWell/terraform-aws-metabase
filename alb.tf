@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket_prefix = "logs-"
+  bucket_prefix = "mb-"
   acl           = "private"
   policy        = data.aws_iam_policy_document.this.json
   force_destroy = !var.log_protection
@@ -41,15 +41,19 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_lb" "this" {
-  name_prefix     = "${var.id}-"
+  name_prefix     = "mb-"
   security_groups = ["${aws_security_group.alb.id}"]
-  subnets         = var.public_subnet_ids
+  subnets         = tolist(var.public_subnet_ids)
   ip_address_type = "dualstack"
   tags            = var.tags
 
   access_logs {
     bucket  = aws_s3_bucket.this.bucket
     enabled = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
