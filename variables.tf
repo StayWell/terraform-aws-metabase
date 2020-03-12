@@ -43,6 +43,11 @@ variable "desired_count" {
   default     = "2"
 }
 
+variable "alb_log_expiration_days" {
+  description = "(Optional) https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#days"
+  default     = "90"
+}
+
 variable "domain" {
   description = "(Required) Domain where metabase will be hosted. Example: metabase.mycompany.com"
 }

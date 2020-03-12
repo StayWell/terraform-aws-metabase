@@ -10,7 +10,7 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_security_group" "ecs" {
-  name_prefix = "${var.id}-"
+  name_prefix = "${var.id}-ecs-"
   vpc_id      = var.vpc_id
   tags        = var.tags
 
