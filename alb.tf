@@ -13,9 +13,10 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket_prefix = var.id
+  bucket_prefix = "logs-"
   acl           = "private"
   policy        = data.aws_iam_policy_document.this.json
+  force_destroy = !var.log_protection
   tags          = var.tags
 
   server_side_encryption_configuration {

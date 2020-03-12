@@ -57,3 +57,8 @@ variable "alb_log_expiration_days" {
   description = "(Optional) https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#days"
   default     = "90"
 }
+
+variable "log_protection" {
+  description = "(Optional) Protect ALB and application logs from deletion"
+  default     = false
+}
