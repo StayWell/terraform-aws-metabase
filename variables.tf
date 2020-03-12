@@ -50,3 +50,7 @@ variable "domain" {
 variable "certificate_arn" {
   description = "(Required) https://www.terraform.io/docs/providers/aws/r/lb_listener.html#certificate_arn"
 }
+
+variable "vpc_id" {
+  description = "(Required) https://www.terraform.io/docs/providers/aws/r/security_group.html#vpc_id"
+}
