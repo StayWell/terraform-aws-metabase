@@ -62,3 +62,8 @@ variable "log_protection" {
   description = "(Optional) Protect ALB and application logs from deletion"
   default     = false
 }
+
+variable "ssl_policy" {
+  description = "(Optional) https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-policy-table.html"
+  default     = "ELBSecurityPolicy-TLS-1-2-2017-01"
+}

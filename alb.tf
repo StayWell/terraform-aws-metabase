@@ -1,3 +1,64 @@
+resource "aws_lb" "this" {
+  name_prefix     = "mb-"
+  security_groups = ["${aws_security_group.alb.id}"]
+  subnets         = tolist(var.public_subnet_ids)
+  ip_address_type = "dualstack"
+  tags            = var.tags
+
+  access_logs {
+    bucket  = aws_s3_bucket.this.bucket
+    enabled = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.this.arn
+  depends_on        = [aws_lb.this] # https://github.com/terraform-providers/terraform-provider-aws/issues/9976
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.this.arn
+  depends_on        = [aws_lb.this] # https://github.com/terraform-providers/terraform-provider-aws/issues/9976
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = var.ssl_policy
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "No valid routing rule"
+      status_code  = "400"
+    }
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 data "aws_elb_service_account" "this" {}
 
 data "aws_iam_policy_document" "this" {
@@ -16,7 +77,7 @@ resource "aws_s3_bucket" "this" {
   bucket_prefix = "mb-"
   acl           = "private"
   policy        = data.aws_iam_policy_document.this.json
-  force_destroy = !var.log_protection
+  force_destroy = ! var.log_protection
   tags          = var.tags
 
   server_side_encryption_configuration {
@@ -33,23 +94,6 @@ resource "aws_s3_bucket" "this" {
     expiration {
       days = var.alb_log_expiration_days
     }
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_lb" "this" {
-  name_prefix     = "mb-"
-  security_groups = ["${aws_security_group.alb.id}"]
-  subnets         = tolist(var.public_subnet_ids)
-  ip_address_type = "dualstack"
-  tags            = var.tags
-
-  access_logs {
-    bucket  = aws_s3_bucket.this.bucket
-    enabled = true
   }
 
   lifecycle {
