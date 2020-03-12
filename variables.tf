@@ -58,7 +58,7 @@ variable "alb_log_expiration_days" {
   default     = "90"
 }
 
-variable "log_protection" {
+variable "protection" {
   description = "(Optional) Protect ALB and application logs from deletion"
   default     = false
 }
@@ -66,4 +66,9 @@ variable "log_protection" {
 variable "ssl_policy" {
   description = "(Optional) https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-policy-table.html"
   default     = "ELBSecurityPolicy-TLS-1-2-2017-01"
+}
+
+variable "snapshot_identifier" {
+  description = "(Optional) https://www.terraform.io/docs/providers/aws/r/rds_cluster.html#snapshot_identifier"
+  default     = ""
 }
