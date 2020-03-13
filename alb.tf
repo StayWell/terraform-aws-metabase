@@ -100,6 +100,7 @@ resource "aws_s3_bucket" "this" {
 resource "random_string" "s3" {
   length  = 6
   special = false
+  upper   = false
 }
 
 locals {
