@@ -30,6 +30,10 @@ resource "aws_rds_cluster" "this" {
 resource "random_string" "this" {
   length  = 32
   special = false
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_ssm_parameter" "this" {
