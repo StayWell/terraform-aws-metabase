@@ -2,7 +2,6 @@ resource "aws_lb" "this" {
   name_prefix     = "mb-"
   security_groups = ["${aws_security_group.alb.id}"]
   subnets         = tolist(var.public_subnet_ids)
-  ip_address_type = "dualstack"
   tags            = var.tags
 
   access_logs {
