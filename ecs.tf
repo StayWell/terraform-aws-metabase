@@ -12,6 +12,7 @@ resource "aws_ecs_cluster" "this" {
 resource "aws_ecs_task_definition" "this" {
   family                   = var.id
   container_definitions    = jsonencode(local.container)
+  execution_role_arn       = aws_iam_role.this.arn
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = var.cpu
@@ -97,6 +98,37 @@ locals {
       value = aws_rds_cluster.this.endpoint
     },
   ]
+}
+
+resource "aws_iam_role" "this" {
+  name_prefix        = var.id
+  assume_role_policy = data.aws_iam_policy_document.ecs.json
+  tags               = var.tags
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+data "aws_iam_policy_document" "ecs" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ecs" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  role       = aws_iam_role.this.name
+}
+
+resource "aws_iam_role_policy_attachment" "ssm" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+  role       = aws_iam_role.this.name
 }
 
 resource "aws_lb_target_group" "this" {
