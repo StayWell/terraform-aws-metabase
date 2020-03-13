@@ -5,6 +5,7 @@ module "metabase" {
   vpc_id             = aws_vpc.this.id
   domain             = "metabase.devops-staywell.com"
   certificate_arn    = "blah"
+  zone_id            = "blah"
 }
 
 resource "aws_vpc" "this" {
