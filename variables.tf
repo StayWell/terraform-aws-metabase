@@ -79,5 +79,5 @@ variable "snapshot_identifier" {
 
 variable "environment" {
   description = "(Optional) Additional container environment variables"
-  default     = {}
+  default     = []
 }

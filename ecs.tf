@@ -48,7 +48,7 @@ locals {
       name        = "metabase"
       image       = var.image
       essential   = true
-      environment = merge(local.environment, var.environment)
+      environment = concat(local.environment, var.environment)
 
       secrets = {
         name      = "MB_DB_PASS"
@@ -70,13 +70,28 @@ locals {
     }
   ]
 
-  environment = {
-    MB_DB_TYPE   = "mysql"
-    MB_DB_DBNAME = aws_rds_cluster.this.database_name
-    MB_DB_PORT   = aws_rds_cluster.this.port
-    MB_DB_USER   = aws_rds_cluster.this.master_username
-    MB_DB_HOST   = aws_rds_cluster.this.endpoint
-  }
+  environment = [
+    {
+      name  = "MB_DB_TYPE"
+      value = "mysql"
+    },
+    {
+      name  = "MB_DB_DBNAME"
+      value = aws_rds_cluster.this.database_name
+    },
+    {
+      name  = "MB_DB_PORT"
+      value = aws_rds_cluster.this.port
+    },
+    {
+      name  = "MB_DB_USER"
+      value = aws_rds_cluster.this.master_username
+    },
+    {
+      name  = "MB_DB_HOST"
+      value = aws_rds_cluster.this.endpoint
+    },
+  ]
 }
 
 resource "aws_lb_target_group" "this" {
