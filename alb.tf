@@ -59,24 +59,9 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-data "aws_elb_service_account" "this" {}
-
-data "aws_iam_policy_document" "this" {
-  statement {
-    actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::${local.bucket}/*"]
-
-    principals {
-      type        = "AWS"
-      identifiers = [data.aws_elb_service_account.this.arn]
-    }
-  }
-}
-
 resource "aws_s3_bucket" "this" {
-  bucket        = local.bucket
+  bucket_prefix = "mb-"
   acl           = "private"
-  policy        = data.aws_iam_policy_document.this.json
   force_destroy = ! var.protection
   tags          = var.tags
 
@@ -95,16 +80,29 @@ resource "aws_s3_bucket" "this" {
       days = var.log_retention
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
-resource "random_string" "s3" {
-  length  = 6
-  special = false
-  upper   = false
+resource "aws_s3_bucket_policy" "b" {
+  bucket = aws_s3_bucket.this.id
+  policy = data.aws_iam_policy_document.this.json
 }
 
-locals {
-  bucket = "${var.id}-${random_string.s3.result}"
+data "aws_elb_service_account" "this" {}
+
+data "aws_iam_policy_document" "this" {
+  statement {
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = [data.aws_elb_service_account.this.arn]
+    }
+  }
 }
 
 resource "aws_security_group" "alb" {
