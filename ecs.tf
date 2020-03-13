@@ -12,7 +12,7 @@ resource "aws_ecs_cluster" "this" {
 resource "aws_ecs_task_definition" "this" {
   family                   = var.id
   container_definitions    = jsonencode(local.container)
-  requires_compatibilities = "FARGATE"
+  requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = var.cpu
   memory                   = var.memory
@@ -95,7 +95,9 @@ resource "aws_lb_listener_rule" "this" {
   }
 
   condition {
-    host_header = [var.domain]
+    host_header {
+      values = [var.domain]
+    }
   }
 }
 
