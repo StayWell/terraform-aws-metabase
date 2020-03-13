@@ -10,6 +10,10 @@ variable "domain" {
   description = "(Required) Domain where metabase will be hosted. Example: metabase.mycompany.com"
 }
 
+variable "zone_id" {
+  description = "(Required) https://www.terraform.io/docs/providers/aws/r/route53_record.html#zone_id"
+}
+
 variable "certificate_arn" {
   description = "(Required) https://www.terraform.io/docs/providers/aws/r/lb_listener.html#certificate_arn"
 }
@@ -53,8 +57,8 @@ variable "desired_count" {
   default     = "2"
 }
 
-variable "alb_log_expiration_days" {
-  description = "(Optional) https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#days"
+variable "log_retention" {
+  description = "(Optional) Retention period in days for both ALB and container logs"
   default     = "90"
 }
 
@@ -71,4 +75,9 @@ variable "ssl_policy" {
 variable "snapshot_identifier" {
   description = "(Optional) https://www.terraform.io/docs/providers/aws/r/rds_cluster.html#snapshot_identifier"
   default     = ""
+}
+
+variable "environment" {
+  description = "(Optional) Additional container environment variables"
+  default     = {}
 }

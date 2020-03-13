@@ -39,7 +39,7 @@ resource "aws_secretsmanager_secret" "this" {
 }
 
 locals {
-  this = {
+  secret = {
     dbInstanceIdentifier = aws_rds_cluster.this.cluster_identifier
     engine               = aws_rds_cluster.this.engine
     dbname               = aws_rds_cluster.this.database_name
@@ -53,7 +53,7 @@ locals {
 
 resource "aws_secretsmanager_secret_version" "this" {
   secret_id     = aws_secretsmanager_secret.this.id
-  secret_string = jsonencode(local.this)
+  secret_string = jsonencode(local.secret)
 }
 
 resource "aws_db_subnet_group" "this" {

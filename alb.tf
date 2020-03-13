@@ -92,7 +92,7 @@ resource "aws_s3_bucket" "this" {
     enabled = true
 
     expiration {
-      days = var.alb_log_expiration_days
+      days = var.log_retention
     }
   }
 
