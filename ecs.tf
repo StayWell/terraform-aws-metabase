@@ -81,7 +81,7 @@ locals {
     },
     {
       name  = "MB_DB_PORT"
-      value = aws_rds_cluster.this.port
+      value = tostring(aws_rds_cluster.this.port)
     },
     {
       name  = "MB_DB_USER"
