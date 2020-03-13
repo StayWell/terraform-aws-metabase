@@ -64,7 +64,7 @@ data "aws_elb_service_account" "this" {}
 data "aws_iam_policy_document" "this" {
   statement {
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::*/*"]
+    resources = ["arn:aws:s3:::${var.id}/*"]
 
     principals {
       type        = "AWS"
@@ -74,7 +74,7 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket_prefix = "mb-"
+  bucket        = var.id
   acl           = "private"
   policy        = data.aws_iam_policy_document.this.json
   force_destroy = ! var.protection
@@ -94,10 +94,6 @@ resource "aws_s3_bucket" "this" {
     expiration {
       days = var.log_retention
     }
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
 

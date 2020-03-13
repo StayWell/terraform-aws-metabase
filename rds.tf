@@ -5,6 +5,7 @@ resource "aws_rds_cluster" "this" {
   engine                          = "aurora"
   engine_mode                     = "serverless"
   database_name                   = "metabase"
+  master_username                 = "root"
   master_password                 = random_string.this.result
   backup_retention_period         = 5     # days
   backtrack_window                = 86400 # 24 hours
@@ -23,6 +24,7 @@ resource "aws_rds_cluster" "this" {
 
   lifecycle {
     create_before_destroy = true
+    ignore_changes        = ["snapshot_identifier"]
   }
 }
 
