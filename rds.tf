@@ -31,6 +31,14 @@ resource "random_string" "this" {
   special = false
 }
 
+resource "aws_ssm_parameter" "this" {
+  name        = var.id
+  description = "RDS password"
+  type        = "SecureString"
+  value       = random_string.this.result
+  tags        = var.tags
+}
+
 resource "aws_secretsmanager_secret" "this" {
   name                    = "rds-db-credentials/${aws_rds_cluster.this.cluster_resource_id}/${var.id}"
   description             = "RDS credentials for use in query editor"

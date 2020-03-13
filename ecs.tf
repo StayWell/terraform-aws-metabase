@@ -49,6 +49,11 @@ locals {
     essential   = true
     environment = merge(local.environment, var.environment)
 
+    secrets = {
+      name      = "MB_DB_PASS"
+      valueFrom = aws_ssm_parameter.this.name
+    }
+
     portMappings = {
       containerPort = 3000
     }
@@ -68,7 +73,6 @@ locals {
     MB_DB_DBNAME = aws_rds_cluster.this.database_name
     MB_DB_PORT   = aws_rds_cluster.this.port
     MB_DB_USER   = aws_rds_cluster.this.master_username
-    MB_DB_PASS   = random_string.this.result
     MB_DB_HOST   = aws_rds_cluster.this.endpoint
   }
 }
