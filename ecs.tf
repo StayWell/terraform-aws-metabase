@@ -43,30 +43,32 @@ resource "aws_ecs_service" "this" {
 data "aws_region" "this" {}
 
 locals {
-  container = {
-    name        = "metabase"
-    image       = var.image
-    essential   = true
-    environment = merge(local.environment, var.environment)
+  container = [
+    {
+      name        = "metabase"
+      image       = var.image
+      essential   = true
+      environment = merge(local.environment, var.environment)
 
-    secrets = {
-      name      = "MB_DB_PASS"
-      valueFrom = aws_ssm_parameter.this.name
-    }
+      secrets = {
+        name      = "MB_DB_PASS"
+        valueFrom = aws_ssm_parameter.this.name
+      }
 
-    portMappings = {
-      containerPort = 3000
-    }
+      portMappings = {
+        containerPort = 3000
+      }
 
-    logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        awslogs-group         = aws_cloudwatch_log_group.this.name
-        awslogs-region        = data.aws_region.this.name
-        awslogs-stream-prefix = "ecs"
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-region        = data.aws_region.this.name
+          awslogs-stream-prefix = "ecs"
+        }
       }
     }
-  }
+  ]
 
   environment = {
     MB_DB_TYPE   = "mysql"
