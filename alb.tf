@@ -64,7 +64,7 @@ data "aws_elb_service_account" "this" {}
 data "aws_iam_policy_document" "this" {
   statement {
     actions   = ["s3:PutObject"]
-    resources = ["*"]
+    resources = ["arn:aws:s3:::*/*"]
 
     principals {
       type        = "AWS"

@@ -1,6 +1,6 @@
 resource "aws_rds_cluster" "this" {
   cluster_identifier_prefix       = "${var.id}-"
-  final_snapshot_identifier       = "${var.id}-${timestamp()}"
+  final_snapshot_identifier       = "${var.id}-${formatdate("YYYYMMDDhhmmss", timestamp())}"
   copy_tags_to_snapshot           = true
   engine                          = "aurora"
   engine_mode                     = "serverless"
