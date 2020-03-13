@@ -4,6 +4,7 @@ resource "aws_rds_cluster" "this" {
   copy_tags_to_snapshot           = true
   engine                          = "aurora"
   engine_mode                     = "serverless"
+  database_name                   = "metabase"
   master_password                 = random_string.this.result
   backup_retention_period         = 5     # days
   backtrack_window                = 86400 # 24 hours
@@ -28,6 +29,31 @@ resource "aws_rds_cluster" "this" {
 resource "random_string" "this" {
   length  = 32
   special = false
+}
+
+resource "aws_secretsmanager_secret" "this" {
+  name                    = "rds-db-credentials/${aws_rds_cluster.this.cluster_resource_id}/${var.id}"
+  description             = "RDS credentials for use in query editor"
+  recovery_window_in_days = 0
+  tags                    = var.tags
+}
+
+locals {
+  this = {
+    dbInstanceIdentifier = aws_rds_cluster.this.cluster_identifier
+    engine               = aws_rds_cluster.this.engine
+    dbname               = aws_rds_cluster.this.database_name
+    host                 = aws_rds_cluster.this.endpoint
+    port                 = aws_rds_cluster.this.port
+    resourceId           = aws_rds_cluster.this.cluster_resource_id
+    username             = aws_rds_cluster.this.master_username
+    password             = random_string.this.result
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "this" {
+  secret_id     = aws_secretsmanager_secret.this.id
+  secret_string = jsonencode(local.this)
 }
 
 resource "aws_db_subnet_group" "this" {
