@@ -50,17 +50,22 @@ locals {
       essential   = true
       environment = concat(local.environment, var.environment)
 
-      secrets = {
-        name      = "MB_DB_PASS"
-        valueFrom = aws_ssm_parameter.this.name
-      }
+      secrets = [
+        {
+          name      = "MB_DB_PASS"
+          valueFrom = aws_ssm_parameter.this.name
+        },
+      ]
 
-      portMappings = {
-        containerPort = 3000
-      }
+      portMappings = [
+        {
+          containerPort = 3000
+        },
+      ]
 
       logConfiguration = {
         logDriver = "awslogs"
+
         options = {
           awslogs-group         = aws_cloudwatch_log_group.this.name
           awslogs-region        = data.aws_region.this.name
