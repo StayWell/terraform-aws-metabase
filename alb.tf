@@ -64,7 +64,7 @@ data "aws_elb_service_account" "this" {}
 data "aws_iam_policy_document" "this" {
   statement {
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::${var.id}/*"]
+    resources = ["arn:aws:s3:::${local.bucket}/*"]
 
     principals {
       type        = "AWS"
@@ -74,7 +74,7 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket        = var.id
+  bucket        = local.bucket
   acl           = "private"
   policy        = data.aws_iam_policy_document.this.json
   force_destroy = ! var.protection
@@ -95,6 +95,15 @@ resource "aws_s3_bucket" "this" {
       days = var.log_retention
     }
   }
+}
+
+resource "random_string" "s3" {
+  length  = 6
+  special = false
+}
+
+locals {
+  bucket = "${var.id}-${random_string.s3.result}"
 }
 
 resource "aws_security_group" "alb" {

@@ -6,9 +6,8 @@ resource "aws_rds_cluster" "this" {
   engine_mode                     = "serverless"
   database_name                   = "metabase"
   master_username                 = "root"
-  master_password                 = random_string.this.result
-  backup_retention_period         = 5     # days
-  backtrack_window                = 86400 # 24 hours
+  master_password                 = random_string.rds.result
+  backup_retention_period         = 5 # days
   snapshot_identifier             = var.snapshot_identifier
   vpc_security_group_ids          = [aws_security_group.rds.id]
   db_subnet_group_name            = aws_db_subnet_group.this.id
@@ -28,7 +27,7 @@ resource "aws_rds_cluster" "this" {
   }
 }
 
-resource "random_string" "this" {
+resource "random_string" "rds" {
   length  = 32
   special = false
 }
@@ -37,7 +36,7 @@ resource "aws_ssm_parameter" "this" {
   name        = var.id
   description = "RDS password"
   type        = "SecureString"
-  value       = random_string.this.result
+  value       = random_string.rds.result
   tags        = var.tags
 }
 
@@ -57,7 +56,7 @@ locals {
     port                 = aws_rds_cluster.this.port
     resourceId           = aws_rds_cluster.this.cluster_resource_id
     username             = aws_rds_cluster.this.master_username
-    password             = random_string.this.result
+    password             = random_string.rds.result
   }
 }
 
