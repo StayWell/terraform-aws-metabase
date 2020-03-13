@@ -30,8 +30,8 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.id
-    container_name   = local.container.name
-    container_port   = local.container.portMappings.containerPort
+    container_name   = local.container[0].name
+    container_port   = local.container[0].portMappings.containerPort
   }
 
   network_configuration {
@@ -81,7 +81,7 @@ locals {
 
 resource "aws_lb_target_group" "this" {
   name        = var.id
-  port        = local.container.portMappings.containerPort
+  port        = local.container[0].portMappings.containerPort
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
