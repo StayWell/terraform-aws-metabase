@@ -27,6 +27,7 @@ resource "aws_ecs_service" "this" {
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
   propagate_tags  = "SERVICE"
+  depends_on      = [aws_lb_listener_rule.this]
   tags            = var.tags
 
   load_balancer {
