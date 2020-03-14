@@ -21,14 +21,15 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_ecs_service" "this" {
-  name            = var.id
-  cluster         = aws_ecs_cluster.this.id
-  task_definition = aws_ecs_task_definition.this.arn
-  desired_count   = var.desired_count
-  launch_type     = "FARGATE"
-  propagate_tags  = "SERVICE"
-  depends_on      = [aws_lb_listener_rule.this]
-  tags            = var.tags
+  name                              = var.id
+  cluster                           = aws_ecs_cluster.this.id
+  task_definition                   = aws_ecs_task_definition.this.arn
+  desired_count                     = var.desired_count
+  launch_type                       = "FARGATE"
+  propagate_tags                    = "SERVICE"
+  health_check_grace_period_seconds = 30
+  depends_on                        = [aws_lb_listener_rule.this]
+  tags                              = var.tags
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.id
