@@ -38,13 +38,13 @@ variable "image" {
 }
 
 variable "cpu" {
-  description = "(Optional) https://www.terraform.io/docs/providers/aws/r/ecs_task_definition.html#cpu"
+  description = "(Optional) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html"
   default     = "512"
 }
 
 variable "memory" {
-  description = "(Optional) https://www.terraform.io/docs/providers/aws/r/ecs_task_definition.html#memory"
-  default     = "1920"
+  description = "(Optional) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html"
+  default     = "2GB"
 }
 
 variable "max_capacity" {
