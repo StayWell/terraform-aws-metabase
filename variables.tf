@@ -44,7 +44,7 @@ variable "cpu" {
 
 variable "memory" {
   description = "(Optional) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html"
-  default     = "2GB"
+  default     = "2048" # must be in integer format to maintain idempotency
 }
 
 variable "max_capacity" {
