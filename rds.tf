@@ -23,7 +23,7 @@ resource "aws_rds_cluster" "this" {
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes        = [snapshot_identifier]
+    ignore_changes        = [snapshot_identifier,final_snapshot_identifier]
   }
 }
 
