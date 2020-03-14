@@ -67,6 +67,11 @@ variable "protection" {
   default     = false
 }
 
+variable "internet_egress" {
+  description = "(Optional) Grant internet access to the Metabase service"
+  default     = true
+}
+
 variable "ssl_policy" {
   description = "(Optional) https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-policy-table.html"
   default     = "ELBSecurityPolicy-TLS-1-2-2017-01"
