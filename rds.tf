@@ -111,6 +111,6 @@ resource "aws_security_group_rule" "rds_ingress_ecs" {
   from_port                = aws_rds_cluster.this.port
   to_port                  = aws_rds_cluster.this.port
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.ecs.id
-  source_security_group_id = aws_security_group.alb.id
+  security_group_id        = aws_security_group.rds.id
+  source_security_group_id = aws_security_group.ecs.id
 }
