@@ -11,7 +11,7 @@ resource "aws_rds_cluster" "this" {
   snapshot_identifier             = var.snapshot_identifier
   vpc_security_group_ids          = [aws_security_group.rds.id]
   db_subnet_group_name            = aws_db_subnet_group.this.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.this.id
+  db_cluster_parameter_group_name = var.db_cluster_parameter_group_name
   deletion_protection             = var.protection
   enable_http_endpoint            = true
   tags                            = var.tags
@@ -73,24 +73,6 @@ resource "aws_db_subnet_group" "this" {
   name_prefix = "${var.id}-"
   subnet_ids  = tolist(var.private_subnet_ids)
   tags        = var.tags
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_rds_cluster_parameter_group" "this" {
-  name_prefix = "mb-"
-  family      = "aurora5.6"
-  tags        = var.tags
-
-  parameter = [
-    {
-      name         = "max_allowed_packet"
-      value        = var.max_allowed_packet
-      apply_method = "pending-reboot"
-    },
-  ]
 
   lifecycle {
     create_before_destroy = true

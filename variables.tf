@@ -92,7 +92,7 @@ variable "java_timezone" {
   default     = "US/Pacific"
 }
 
-variable "max_allowed_packet" {
-  description = "(Optional) https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html"
-  default     = "64000000" # bytes
+variable "db_cluster_parameter_group_name" {
+  description = "(Optional) https://www.terraform.io/docs/providers/aws/r/rds_cluster.html#db_cluster_parameter_group_name"
+  default     = ""
 }
