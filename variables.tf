@@ -86,3 +86,8 @@ variable "environment" {
   description = "(Optional) Additional container environment variables"
   default     = []
 }
+
+variable "max_allowed_packet" {
+  description = "(Optional) https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html"
+  default     = "64000000" # bytes
+}

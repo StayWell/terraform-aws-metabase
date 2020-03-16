@@ -23,7 +23,7 @@ resource "aws_rds_cluster" "this" {
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes        = [snapshot_identifier,final_snapshot_identifier]
+    ignore_changes        = [snapshot_identifier, final_snapshot_identifier]
   }
 }
 
@@ -87,6 +87,12 @@ resource "aws_rds_cluster_parameter_group" "this" {
   parameter {
     name         = "lower_case_table_names"
     value        = "1"
+    apply_method = "pending-reboot"
+  }
+
+  parameter {
+    name         = "max_allowed_packet"
+    value        = var.max_allowed_packet
     apply_method = "pending-reboot"
   }
 
