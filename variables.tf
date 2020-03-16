@@ -87,6 +87,11 @@ variable "environment" {
   default     = []
 }
 
+variable "java_timezone" {
+  description = "(Optional) https://www.metabase.com/docs/v0.21.1/operations-guide/running-metabase-on-docker.html#setting-the-java-timezone"
+  default     = "US/Pacific"
+}
+
 variable "max_allowed_packet" {
   description = "(Optional) https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html"
   default     = "64000000" # bytes

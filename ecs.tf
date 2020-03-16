@@ -80,6 +80,10 @@ locals {
 
   environment = [
     {
+      name  = "JAVA_TIMEZONE"
+      value = var.java_timezone
+    },
+    {
       name  = "MB_DB_TYPE"
       value = "mysql"
     },
