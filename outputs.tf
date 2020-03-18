@@ -7,3 +7,8 @@ output "rds_port" {
   description = "https://www.terraform.io/docs/providers/aws/r/rds_cluster.html#port-1"
   value       = aws_rds_cluster.this.port
 }
+
+output "listener_arn" {
+  description = "https://www.terraform.io/docs/providers/aws/r/lb_listener.html#arn"
+  value       = aws_lb_listener.https.arn
+}
